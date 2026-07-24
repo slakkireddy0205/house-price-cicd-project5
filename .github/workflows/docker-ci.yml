@@ -1,0 +1,30 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t house-price-api .
+
+      - name: Run container
+        run: docker run -d -p 8000:8000 --name test-container house-price-api
+
+      - name: Wait for app to start
+        run: sleep 5
+
+      - name: Test root endpoint
+        run: curl --fail http://localhost:8000/
+
+      - name: Stop container
+        run: docker stop test-container
