@@ -26,5 +26,11 @@ jobs:
       - name: Test root endpoint
         run: curl --fail http://localhost:8000/
 
+      - name: Test predict endpoint
+        run: |
+          curl --fail -X POST http://localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d '{"area": 6000, "bedrooms": 3, "bathrooms": 2, "stories": 2, "mainroad": "yes", "guestroom": "no", "basement": "yes", "hotwaterheating": "no", "airconditioning": "yes", "parking": 1, "prefarea": "yes", "furnishingstatus": "semi-furnished"}'
+
       - name: Stop container
         run: docker stop test-container
